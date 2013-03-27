@@ -57,7 +57,7 @@ public class RoboViz implements GLEventListener {
 
     initGUI();
     
-    setScene(new BasicScene());
+    setScene(new SPLScene());
 
     animator.start();
   }
@@ -149,8 +149,20 @@ public class RoboViz implements GLEventListener {
   }
 
   private void setScene(Scene scene) {
-    if (this.newScene == null)
+    if (this.scene != null) {
+      canvas.removeKeyListener(this.scene);
+      canvas.removeMouseListener(this.scene);
+      canvas.removeMouseMotionListener(this.scene);
+      canvas.removeMouseWheelListener(this.scene);
+    }
+    
+    if (this.newScene == null) {
       this.newScene = scene;
+      canvas.addKeyListener(scene);
+      canvas.addMouseListener(scene);
+      canvas.addMouseMotionListener(scene);
+      canvas.addMouseWheelListener(scene);
+    }
   }
 
   @Override
@@ -164,7 +176,7 @@ public class RoboViz implements GLEventListener {
   @Override
   public void init(GLAutoDrawable drawable) {
     GL2 gl = drawable.getGL().getGL2();
-    gl.glClearColor(1, 1, 1, 1);
+    gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
     drawManager.init();
   }
 

@@ -21,14 +21,16 @@ public class Config extends ConfigFile {
   public float penaltyMarkDistance  = 1.8f;
   public float centerCircleDiameter = 1.5f;
   public float borderStripWidth     = 0.7f;
-  
-  public float goalBarDiameter = 0.1f;
-  public float goalWidth = 1.7f;
+
+  public float goalBarDiameter      = 0.1f;
+  public float goalWidth            = 1.5f;
+  public float goalHeight           = 0.8f;
+  public float goalLength           = 0.5f;
 
   public Config(File file) {
     super(file);
   }
-  
+
   @Override
   public void save() {
     try {
