@@ -28,6 +28,7 @@ import jgl.core.Viewport;
 import roboviz.draw.DrawManager;
 import roboviz.scene.Scene;
 import roboviz.scene.basic.BasicScene;
+import roboviz.scene.spl.SPLScene;
 
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.opengl.util.AnimatorBase;
@@ -40,7 +41,8 @@ import com.jogamp.opengl.util.FPSAnimator;
  */
 public class RoboViz implements GLEventListener {
 
-  Scene        scene       = new BasicScene();
+  Scene        scene;
+  Scene        newScene;
   DrawManager  drawManager = new DrawManager();
   Viewport     viewport    = new Viewport(0, 0, 1, 1);
   JFrame       mainFrame;
@@ -54,6 +56,8 @@ public class RoboViz implements GLEventListener {
     animator = new FPSAnimator(canvas, 60);
 
     initGUI();
+    
+    setScene(new BasicScene());
 
     animator.start();
   }
@@ -61,6 +65,16 @@ public class RoboViz implements GLEventListener {
   @Override
   public void display(GLAutoDrawable drawable) {
     GL2 gl = drawable.getGL().getGL2();
+
+    if (newScene != null) {
+      if (scene != null)
+        scene.dispose(gl);
+      scene = newScene;
+      scene.init(gl);
+      scene.resize(gl, viewport);
+      newScene = null;
+    }
+
     gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 
     scene.update(gl, 16);
@@ -88,17 +102,39 @@ public class RoboViz implements GLEventListener {
     drawDialog.add(drawManager.getDrawPanel());
     drawDialog.pack();
     drawDialog.setLocationByPlatform(true);
-    drawDialog.setVisible(true);
 
     MenuBar menuBar = new MenuBar();
+    mainFrame.setMenuBar(menuBar);
+
     Menu sceneMenu = new Menu("Scene");
+    menuBar.add(sceneMenu);
     sceneMenu.add(new MenuItem("None"));
     sceneMenu.addSeparator();
-    sceneMenu.add(new MenuItem("RoboCup Simulation 3D"));
-    sceneMenu.add(new MenuItem("RoboCup Simulation 3D Log"));
-    sceneMenu.add(new MenuItem("RoboCup Standard Platform"));
-    menuBar.add(sceneMenu);
-    
+
+    MenuItem rcs3dItem = new MenuItem("RoboCup Simulation 3D");
+    rcs3dItem.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        setScene(new BasicScene());
+      }
+    });
+    sceneMenu.add(rcs3dItem);
+
+    MenuItem rcs3dlogItem = new MenuItem("RoboCup Simulation 3D Log");
+    rcs3dlogItem.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        setScene(new BasicScene());
+      }
+    });
+    sceneMenu.add(rcs3dlogItem);
+
+    MenuItem rcsplItem = new MenuItem("RoboCup Standard Platform");
+    rcsplItem.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        setScene(new SPLScene());
+      }
+    });
+    sceneMenu.add(rcsplItem);
+
     Menu viewMenu = new Menu("View");
     MenuItem viewDrawingsItem = new MenuItem("Drawings", new MenuShortcut(KeyEvent.VK_D));
     viewDrawingsItem.addActionListener(new ActionListener() {
@@ -109,23 +145,26 @@ public class RoboViz implements GLEventListener {
     viewMenu.add(viewDrawingsItem);
     menuBar.add(viewMenu);
 
-    mainFrame.setMenuBar(menuBar);
-
     mainFrame.setVisible(true);
+  }
+
+  private void setScene(Scene scene) {
+    if (this.newScene == null)
+      this.newScene = scene;
   }
 
   @Override
   public void dispose(GLAutoDrawable drawable) {
     GL2 gl = drawable.getGL().getGL2();
-    scene.dispose(gl);
+    if (scene != null)
+      scene.dispose(gl);
     drawManager.dispose(gl);
   }
 
   @Override
   public void init(GLAutoDrawable drawable) {
     GL2 gl = drawable.getGL().getGL2();
-    gl.glClearColor(0, 0, 0, 0);
-
+    gl.glClearColor(1, 1, 1, 1);
     drawManager.init();
   }
 
@@ -134,7 +173,9 @@ public class RoboViz implements GLEventListener {
     GL2 gl = drawable.getGL().getGL2();
     viewport.width = width;
     viewport.height = height;
-    scene.resize(gl, viewport);
+
+    if (scene != null)
+      scene.resize(gl, viewport);
   }
 
   public static void main(String[] args) {

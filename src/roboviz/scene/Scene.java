@@ -15,6 +15,7 @@ import java.awt.event.MouseWheelListener;
 import javax.media.opengl.GL2;
 
 import jgl.core.Viewport;
+import jgl.math.vector.Transform;
 import jgl.scene.cameras.Camera;
 
 /**
@@ -26,6 +27,11 @@ public abstract class Scene implements KeyListener, MouseListener, MouseMotionLi
     MouseWheelListener {
 
   protected Camera camera = new Camera();
+
+  public Scene() {
+    camera.setView(Transform.lookAt(10, 0, 10, 0, 0, 0, 0, 0, 1));
+    camera.setProjection(Transform.perspective(60, 1, 0.1f, 100));
+  }
 
   public Camera getCamera() {
     return camera;

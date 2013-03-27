@@ -6,56 +6,48 @@ package roboviz.util;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-/**
- * Reads and writes configuration values from/to file for use in a RoboViz module. The configuration
- * file must be in the RoboViz config directory, which is set by the system property
- * "rv.config.dir".
- * 
- * @author justin
- */
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.error.YAMLException;
+
 public class ConfigFile extends Properties {
 
-  private final String name;
+  protected File file;
 
-  /**
-   * Reads configuration properties from the given file name. Provide the name of the file as it
-   * appears in the RoboViz configuration directory without the extension. For example, "rv_main"
-   * for the file conf/rv_main.cfg where "conf/" is set by the system property rv.config.dir.
-   */
-  public ConfigFile(String name) {
-    this.name = name + ".cfg";
-    load();
+  public ConfigFile(File file) {
+    this.file = file;
   }
-  
-  /**
-   * Saves values to the config object's stored file name (if not null).
-   */
-  public void save() {
-    if (name != null) {
-      try {
-        File configFile = new File(System.getProperty("rv.config.dir"), name);
-        store(new FileOutputStream(configFile), null);
-      } catch (IOException e) {
-      }
+
+  public static ConfigFile load(File file, Class<? extends ConfigFile> clazz) {
+    try {
+      Yaml yaml = new Yaml(new Constructor(clazz));
+      ConfigFile config = (ConfigFile) yaml.load(new FileInputStream(file));
+      config.file = file;
+      return config;
+    } catch (FileNotFoundException e) {
+      return new ConfigFile(file);
+    } catch (YAMLException e) {
+      System.err.println("Could not parse config file -- using defaults");
+      return new ConfigFile(file);
     }
   }
 
-  /**
-   * Loads values from provided file name (if not null). This is called automatically by the
-   * constructor, so only call this to overwrite existing values.
-   */
-  public void load() {
-    if (name != null) {
-      try {
-        File configFile = new File(System.getProperty("rv.config.dir"), name);
-        load(new FileInputStream(configFile));
-      } catch (IOException e) {
-    	  System.err.println(e.getMessage());
-      }
+  public void save() {
+    try {
+      DumperOptions opts = new DumperOptions();
+      opts.setPrettyFlow(true);
+      Yaml yaml = new Yaml(opts);
+      FileOutputStream out = new FileOutputStream(file);
+      out.write(yaml.dump(this).getBytes());
+      out.close();
+    } catch (IOException e) {
+      System.err.println("ERROR writing file: " + file);
     }
   }
 }

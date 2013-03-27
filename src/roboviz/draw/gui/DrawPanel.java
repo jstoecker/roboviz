@@ -13,7 +13,6 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTree;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.TreeModelEvent;
@@ -23,9 +22,7 @@ import roboviz.draw.drawable.DrawableGraph;
 import roboviz.draw.drawable.DrawableNode;
 
 public class DrawPanel extends JPanel {
-  private JPanel              southPanel;
-  private JPanel              shapePanel;
-  private JTree               shapeTree;
+  private JTree               tree;
   private final DrawableGraph graph;
 
   public DrawPanel(final DrawableGraph graph) {
@@ -35,40 +32,25 @@ public class DrawPanel extends JPanel {
     setBorder(new EmptyBorder(5, 5, 5, 5));
     setLayout(new BorderLayout(0, 0));
 
-    JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-    add(tabbedPane, BorderLayout.CENTER);
-
-    shapePanel = new JPanel();
-    tabbedPane.addTab("Shapes", null, shapePanel, null);
-    shapePanel.setLayout(new BorderLayout(0, 0));
-
-    southPanel = new JPanel();
-    shapePanel.add(southPanel, BorderLayout.SOUTH);
-
-    JPanel textPanel = new JPanel();
-    tabbedPane.addTab("Annotations", null, textPanel, null);
-
-    shapeTree = new JTree(graph);
-    shapeTree.setToggleClickCount(0);
-    shapeTree.setCellRenderer(new DrawableTreeCellRenderer());
-    shapePanel.add(new JScrollPane(shapeTree), BorderLayout.CENTER);
-    textPanel.setLayout(new BorderLayout(0, 0));
-
-    shapeTree.addMouseListener(new TreeMouseSelector());
+    tree = new JTree(graph);
+    tree.setToggleClickCount(0);
+    tree.setCellRenderer(new DrawableTreeCellRenderer());
+    tree.addMouseListener(new TreeMouseSelector());
+    add(new JScrollPane(tree), BorderLayout.CENTER);
 
     JButton btnClear = new JButton("Clear");
     btnClear.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent arg0) {
         graph.clear();
+        revalidate();
       }
     });
-    southPanel.add(btnClear);
+    add(btnClear, BorderLayout.SOUTH);
   }
 
   private class TreeMouseSelector extends MouseAdapter {
-
     public void mousePressed(MouseEvent e) {
-      TreePath path = shapeTree.getPathForLocation(e.getX(), e.getY());
+      TreePath path = tree.getPathForLocation(e.getX(), e.getY());
       if (path != null) {
         DrawableNode node = (DrawableNode) path.getLastPathComponent();
         node.setVisible(!node.isVisible());
