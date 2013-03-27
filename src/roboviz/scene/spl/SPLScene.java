@@ -91,7 +91,7 @@ public class SPLScene extends Scene {
 
   @Override
   public void dispose(GL2 gl) {
-    cfg.save();
+//    cfg.save();
     gl.glDeleteLists(displayList, 1);
   }
 
