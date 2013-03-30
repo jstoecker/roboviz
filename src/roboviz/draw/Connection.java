@@ -29,7 +29,8 @@ import java.nio.ByteBuffer;
  * @author justin
  */
 class Connection {
-  private static final int BUFFER_SIZE = 512;
+  private static final int BUFFER_SIZE = 8192;
+  byte[]                   buf         = new byte[BUFFER_SIZE];
 
   DrawManager              manager;
   ReceiveThread            receiver    = new ReceiveThread();
@@ -55,7 +56,6 @@ class Connection {
     public void run() {
       while (running) {
         try {
-          byte[] buf = new byte[BUFFER_SIZE];
           DatagramPacket packet = new DatagramPacket(buf, buf.length);
           socket.receive(packet);
 
