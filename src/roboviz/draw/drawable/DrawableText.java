@@ -1,10 +1,7 @@
 /*******************************************************************************
- *  Copyright (C) 2013 Justin Stoecker
- *  The MIT License. See LICENSE in project root.
+ *  Copyright (C) 2013 Justin Stoecker. The MIT License.
  *******************************************************************************/
 package roboviz.draw.drawable;
-
-import javax.media.opengl.GL2;
 
 import jgl.math.vector.Vec3f;
 
@@ -13,13 +10,13 @@ import jgl.math.vector.Vec3f;
  * 
  * @author justin
  */
-public class Text extends Drawable {
+public class DrawableText extends Drawable {
 
   public final Vec3f  position;
   public final Vec3f  color;
   public final String text;
 
-  public Text(Vec3f position, Vec3f color, String text, String setName) {
+  public DrawableText(Vec3f position, Vec3f color, String text, String setName) {
     super(setName);
     this.position = position;
     this.color = color;

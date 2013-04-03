@@ -1,6 +1,5 @@
 /*******************************************************************************
- *  Copyright (C) 2013 Justin Stoecker
- *  The MIT License. See LICENSE in project root.
+ *  Copyright (C) 2013 Justin Stoecker. The MIT License.
  *******************************************************************************/
 package roboviz.draw;
 
@@ -17,12 +16,12 @@ import jgl.core.Viewport;
 import jgl.math.vector.Transform;
 import jgl.math.vector.Vec3f;
 import jgl.scene.cameras.Camera;
-import roboviz.draw.drawable.Circle;
+import roboviz.draw.drawable.DrawableCircle;
 import roboviz.draw.drawable.Drawable;
 import roboviz.draw.drawable.DrawableGraph;
 import roboviz.draw.drawable.DrawableNode;
-import roboviz.draw.drawable.Sphere;
-import roboviz.draw.drawable.Text;
+import roboviz.draw.drawable.DrawableSphere;
+import roboviz.draw.drawable.DrawableText;
 import roboviz.draw.gui.DrawPanel;
 
 import com.jogamp.opengl.util.awt.TextRenderer;
@@ -55,8 +54,8 @@ public class DrawManager {
 
   public void dispose(GL2 gl) {
     connection.shutdown();
-    Circle.cache.dispose(gl);
-    Sphere.cache.dispose(gl);
+    DrawableCircle.cache.dispose(gl);
+    DrawableSphere.cache.dispose(gl);
   }
 
   public void reset() {
@@ -71,7 +70,7 @@ public class DrawManager {
     gl.glDisable(GL.GL_TEXTURE_2D);
     gl.glDisable(GL2.GL_LIGHTING);
 
-    ArrayList<Text> texts = new ArrayList<Text>();
+    ArrayList<DrawableText> texts = new ArrayList<DrawableText>();
 
     synchronized (graph) {
       renderNode(gl, graph.getRoot(), texts);
@@ -79,7 +78,7 @@ public class DrawManager {
 
     if (texts.size() > 0) {
       textRenderer.beginRendering(viewport.width, viewport.height);
-      for (Text text : texts) {
+      for (DrawableText text : texts) {
         Vec3f p = Transform.worldToWindow(viewport, camera, text.position);
         textRenderer.setColor(text.color.x, text.color.y, text.color.z, 1);
         textRenderer.draw3D(text.text, p.x, p.y, p.z, 1);
@@ -90,13 +89,13 @@ public class DrawManager {
     gl.glPopAttrib();
   }
 
-  private void renderNode(GL2 gl, DrawableNode node, List<Text> textNodes) {
+  private void renderNode(GL2 gl, DrawableNode node, List<DrawableText> textNodes) {
     if (!node.isVisible())
       return;
     
     for (Drawable drawable : node.getFront()) {
-      if (drawable instanceof Text)
-        textNodes.add((Text) drawable);
+      if (drawable instanceof DrawableText)
+        textNodes.add((DrawableText) drawable);
       else
         drawable.render(gl);
     }

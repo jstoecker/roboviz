@@ -1,6 +1,5 @@
 /*******************************************************************************
- *  Copyright (C) 2013 Justin Stoecker
- *  The MIT License. See LICENSE in project root.
+ *  Copyright (C) 2013 Justin Stoecker. The MIT License.
  *******************************************************************************/
 package roboviz.draw.drawable;
 
@@ -8,20 +7,19 @@ import javax.media.opengl.GL2;
 
 import jgl.math.vector.Vec2f;
 import jgl.math.vector.Vec3f;
-import jgl.scene.geometry.Geometry;
 import jgl.scene.geometry.extra.CircleGeometry;
 import roboviz.util.GeometryCache;
 
-public class Circle extends Drawable implements GeometryCache.Generator {
+public class DrawableCircle extends Drawable implements GeometryCache.Generator {
 
-  public static final GeometryCache<Circle> cache = new GeometryCache<Circle>(10);
+  public static final GeometryCache<DrawableCircle> cache = new GeometryCache<DrawableCircle>(10);
 
   public final Vec2f                  position;
   public final float                  radius;
   public final float                  thickness;
   public final Vec3f                  color;
 
-  public Circle(Vec2f position, float radius, float thickness, Vec3f color, String setName) {
+  public DrawableCircle(Vec2f position, float radius, float thickness, Vec3f color, String setName) {
     super(setName);
     this.position = position;
     this.radius = radius;
@@ -30,15 +28,12 @@ public class Circle extends Drawable implements GeometryCache.Generator {
   }
 
   @Override
-  public Geometry newGeometry() {
+  public CircleGeometry newGeometry() {
     return CircleGeometry.posZ(radius - thickness, radius, 32);
   }
 
   @Override
   public void render(GL2 gl) {
-    
-    System.out.println("circle draw " + position);
-    
     gl.glPushMatrix();
     gl.glTranslatef(position.x, position.y, 0);
     gl.glColor3f(color.x, color.y, color.z);
@@ -63,7 +58,7 @@ public class Circle extends Drawable implements GeometryCache.Generator {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    Circle other = (Circle) obj;
+    DrawableCircle other = (DrawableCircle) obj;
     if (Float.floatToIntBits(radius) != Float.floatToIntBits(other.radius))
       return false;
     if (Float.floatToIntBits(thickness) != Float.floatToIntBits(other.thickness))

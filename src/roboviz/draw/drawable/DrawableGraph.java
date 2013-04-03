@@ -1,12 +1,10 @@
 /*******************************************************************************
- *  Copyright (C) 2013 Justin Stoecker
- *  The MIT License. See LICENSE in project root.
+ *  Copyright (C) 2013 Justin Stoecker. The MIT License.
  *******************************************************************************/
 package roboviz.draw.drawable;
 
 import java.awt.EventQueue;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;

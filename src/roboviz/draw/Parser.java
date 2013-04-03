@@ -1,6 +1,5 @@
 /*******************************************************************************
- *  Copyright (C) 2013 Justin Stoecker
- *  The MIT License. See LICENSE in project root.
+ *  Copyright (C) 2013 Justin Stoecker. The MIT License.
  *******************************************************************************/
 package roboviz.draw;
 
@@ -9,13 +8,13 @@ import java.nio.ByteBuffer;
 import jgl.math.vector.Vec2f;
 import jgl.math.vector.Vec3f;
 import jgl.math.vector.Vec4f;
-import roboviz.draw.drawable.Circle;
+import roboviz.draw.drawable.DrawableCircle;
 import roboviz.draw.drawable.Drawable;
-import roboviz.draw.drawable.Line;
-import roboviz.draw.drawable.Point;
-import roboviz.draw.drawable.Polygon;
-import roboviz.draw.drawable.Sphere;
-import roboviz.draw.drawable.Text;
+import roboviz.draw.drawable.DrawableLine;
+import roboviz.draw.drawable.DrawablePoint;
+import roboviz.draw.drawable.DrawablePolygon;
+import roboviz.draw.drawable.DrawableSphere;
+import roboviz.draw.drawable.DrawableText;
 
 /**
  * Parses binary input into commands, then executes them.
@@ -110,48 +109,48 @@ class Parser {
     }
   }
 
-  private Circle parseCircle(ByteBuffer buf) {
+  private DrawableCircle parseCircle(ByteBuffer buf) {
     Vec2f position = getXY(buf);
     float radius = getFloat(buf);
     float thickness = getFloat(buf);
     Vec3f color = getRGB(buf);
     String set = getString(buf);
-    return new Circle(position, radius, thickness, color, set);
+    return new DrawableCircle(position, radius, thickness, color, set);
   }
 
-  private Line parseLine(ByteBuffer buf) {
+  private DrawableLine parseLine(ByteBuffer buf) {
     Vec3f start = getXYZ(buf);
     Vec3f end = getXYZ(buf);
     float thickness = getFloat(buf);
     Vec3f color = getRGB(buf);
     String set = getString(buf);
-    return new Line(start, end, thickness, color, set);
+    return new DrawableLine(start, end, thickness, color, set);
   }
 
-  private Point parsePoint(ByteBuffer buf) {
+  private DrawablePoint parsePoint(ByteBuffer buf) {
     Vec3f position = getXYZ(buf);
     float size = getFloat(buf);
     Vec3f color = getRGB(buf);
     String set = getString(buf);
-    return new Point(position, size, color, set);
+    return new DrawablePoint(position, size, color, set);
   }
 
-  private Sphere parseSphere(ByteBuffer buf) {
+  private DrawableSphere parseSphere(ByteBuffer buf) {
     Vec3f position = getXYZ(buf);
     float radius = getFloat(buf);
     Vec3f color = getRGB(buf);
     String set = getString(buf);
-    return new Sphere(position, radius, color, set);
+    return new DrawableSphere(position, radius, color, set);
   }
 
-  private Polygon parsePolygon(ByteBuffer buf) {
+  private DrawablePolygon parsePolygon(ByteBuffer buf) {
     int numVerts = getUnsignedByte(buf);
     Vec3f[] vertices = new Vec3f[numVerts];
     Vec4f color = getRGBA(buf);
     for (int i = 0; i < numVerts; i++)
       vertices[i] = getXYZ(buf);
     String set = getString(buf);
-    return new Polygon(color, vertices, set);
+    return new DrawablePolygon(color, vertices, set);
   }
 
   private void parseDrawText(ByteBuffer buf) {
@@ -173,7 +172,7 @@ class Parser {
     Vec3f color = getRGB(buf);
     String text = getString(buf);
     String set = getString(buf);
-    manager.graph.add(new Text(position, color, text, set));
+    manager.graph.add(new DrawableText(position, color, text, set));
   }
 
   private void parseFloatText(ByteBuffer buf) {

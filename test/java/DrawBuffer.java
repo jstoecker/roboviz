@@ -1,3 +1,6 @@
+/*******************************************************************************
+ *  Copyright (C) 2013 Justin Stoecker. The MIT License.
+ *******************************************************************************/
 import java.awt.Color;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;

@@ -1,6 +1,5 @@
 /*******************************************************************************
- *  Copyright (C) 2013 Justin Stoecker
- *  The MIT License. See LICENSE in project root.
+ *  Copyright (C) 2013 Justin Stoecker. The MIT License.
  *******************************************************************************/
 package roboviz.draw.drawable;
 
@@ -8,14 +7,14 @@ import javax.media.opengl.GL2;
 
 import jgl.math.vector.Vec3f;
 
-public class Line extends Drawable {
+public class DrawableLine extends Drawable {
 
   public final Vec3f  start;
   public final Vec3f  end;
   public final float  thickness;
   public final Vec3f  color;
 
-  public Line(Vec3f start, Vec3f end, float thickness, Vec3f color, String setName) {
+  public DrawableLine(Vec3f start, Vec3f end, float thickness, Vec3f color, String setName) {
     super(setName);
     this.start = start;
     this.end = end;

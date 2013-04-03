@@ -1,25 +1,23 @@
 /*******************************************************************************
- *  Copyright (C) 2013 Justin Stoecker
- *  The MIT License. See LICENSE in project root.
+ *  Copyright (C) 2013 Justin Stoecker. The MIT License.
  *******************************************************************************/
 package roboviz.draw.drawable;
 
 import javax.media.opengl.GL2;
 
 import jgl.math.vector.Vec3f;
-import jgl.scene.geometry.Geometry;
 import jgl.scene.geometry.extra.SphereGeometry;
 import roboviz.util.GeometryCache;
 
-public class Sphere extends Drawable implements GeometryCache.Generator {
+public class DrawableSphere extends Drawable implements GeometryCache.Generator {
 
-  public static final GeometryCache<Sphere> cache = new GeometryCache<Sphere>(10);
+  public static final GeometryCache<DrawableSphere> cache = new GeometryCache<DrawableSphere>(10);
 
   public final Vec3f                         position;
   public final float                         radius;
   public final Vec3f                         color;
 
-  public Sphere(Vec3f position, float radius, Vec3f color, String setName) {
+  public DrawableSphere(Vec3f position, float radius, Vec3f color, String setName) {
     super(setName);
     this.position = position;
     this.radius = radius;
@@ -27,7 +25,7 @@ public class Sphere extends Drawable implements GeometryCache.Generator {
   }
 
   @Override
-  public Geometry newGeometry() {
+  public SphereGeometry newGeometry() {
     return new SphereGeometry(radius, 8);
   }
   

@@ -1,3 +1,6 @@
+/*******************************************************************************
+ *  Copyright (C) 2013 Justin Stoecker. The MIT License.
+ *******************************************************************************/
 import java.awt.Color;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;

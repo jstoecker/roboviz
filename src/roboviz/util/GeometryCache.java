@@ -1,6 +1,5 @@
 /*******************************************************************************
- *  Copyright (C) 2013 Justin Stoecker
- *  The MIT License. See LICENSE in project root.
+ *  Copyright (C) 2013 Justin Stoecker. The MIT License.
  *******************************************************************************/
 package roboviz.util;
 
@@ -25,7 +24,7 @@ public class GeometryCache<T extends Generator> {
 
   /** When new geometry needs to be created for the cache, the task is delegated. */
   public interface Generator {
-    Geometry newGeometry();
+    Geometry<?> newGeometry();
   }
 
   private final int                 capacity;
@@ -44,7 +43,7 @@ public class GeometryCache<T extends Generator> {
       // none found, so create a new display list and geometry
       displayList = gl.glGenLists(1);
       gl.glNewList(displayList, GL2.GL_COMPILE);
-      generator.newGeometry().drawImmediate(gl);
+      generator.newGeometry().drawArrays(gl);
       gl.glEndList();
 
       // add to the cache
