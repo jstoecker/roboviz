@@ -8,7 +8,7 @@ import javax.media.opengl.GL2;
 
 import jgl.math.vector.Vec3f;
 import jgl.scene.geometry.Geometry;
-import jgl.scene.geometry.SphereGeometry;
+import jgl.scene.geometry.extra.SphereGeometry;
 import roboviz.util.GeometryCache;
 
 public class Sphere extends Drawable implements GeometryCache.Generator {

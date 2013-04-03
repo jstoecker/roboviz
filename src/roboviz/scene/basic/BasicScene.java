@@ -8,7 +8,7 @@ import javax.media.opengl.GL2;
 
 import jgl.core.Viewport;
 import jgl.math.vector.Transform;
-import jgl.scene.geometry.GridGeometry;
+import jgl.scene.geometry.extra.GridGeometry;
 import roboviz.scene.Scene;
 
 /**
@@ -18,7 +18,7 @@ import roboviz.scene.Scene;
  */
 public class BasicScene extends Scene {
 
-  GridGeometry grid = GridGeometry.aroundZ(10, 1);
+  GridGeometry grid = GridGeometry.inXY(10, 10, 10, 10);
 
   public BasicScene() {
   }

@@ -8,8 +8,8 @@ import javax.media.opengl.GL2;
 
 import jgl.math.vector.Vec2f;
 import jgl.math.vector.Vec3f;
-import jgl.scene.geometry.CircleGeometry;
 import jgl.scene.geometry.Geometry;
+import jgl.scene.geometry.extra.CircleGeometry;
 import roboviz.util.GeometryCache;
 
 public class Circle extends Drawable implements GeometryCache.Generator {
@@ -31,7 +31,7 @@ public class Circle extends Drawable implements GeometryCache.Generator {
 
   @Override
   public Geometry newGeometry() {
-    return CircleGeometry.aroundZ(radius - thickness, radius, 32);
+    return CircleGeometry.posZ(radius - thickness, radius, 32);
   }
 
   @Override

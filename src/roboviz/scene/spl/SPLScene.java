@@ -11,10 +11,10 @@ import jgl.core.Viewport;
 import jgl.math.Maths;
 import jgl.math.vector.Transform;
 import jgl.scene.cameras.OrbitController;
-import jgl.scene.geometry.CircleGeometry;
-import jgl.scene.geometry.CylinderGeometry;
 import jgl.scene.geometry.Geometry;
-import jgl.scene.geometry.PlaneGeometry;
+import jgl.scene.geometry.extra.CircleGeometry;
+import jgl.scene.geometry.extra.CylinderGeometry;
+import jgl.scene.geometry.extra.PlaneGeometry;
 import jgl.scene.lights.DirectionalLight;
 import jgl.scene.lights.LightModel;
 import jgl.scene.materials.Material;
@@ -146,7 +146,7 @@ public class SPLScene extends Scene {
 
     // center circle
     float innerRadius = cfg.centerCircleDiameter / 2 - cfg.lineWidth / 2;
-    CircleGeometry.aroundZ(innerRadius, innerRadius + cfg.lineWidth, 64).drawImmediate(gl);
+    CircleGeometry.posZ(innerRadius, innerRadius + cfg.lineWidth, 64).drawImmediate(gl);
     
     gl.glEnable(GL.GL_DEPTH_TEST);
     
@@ -170,8 +170,8 @@ public class SPLScene extends Scene {
     gl.glPushMatrix();
     gl.glTranslatef(cfg.fieldLength/2 + goalBarRadius/2, 0, 0);
     
-    Geometry post = CylinderGeometry.aroundZ(goalBarRadius, cfg.goalHeight + goalBarRadius, false, 16);
-    Geometry post2 = CylinderGeometry.aroundY(goalBarRadius, cfg.goalWidth + cfg.goalBarDiameter * 2, true, 16);
+    Geometry post = CylinderGeometry.posZ(goalBarRadius, goalBarRadius, cfg.goalHeight + goalBarRadius, 16, false);
+    Geometry post2 = CylinderGeometry.posY(goalBarRadius, goalBarRadius, cfg.goalWidth + cfg.goalBarDiameter * 2, 16, true);
     drawGeom(gl, post, 0, cfg.goalWidth/2 + goalBarRadius, (cfg.goalHeight + goalBarRadius) / 2, 1, 1, 1);
     drawGeom(gl, post, 0, -(cfg.goalWidth/2 + goalBarRadius), (cfg.goalHeight + goalBarRadius) / 2, 1, 1, 1);
     drawGeom(gl, post2, 0, 0, cfg.goalHeight + goalBarRadius, 1, 1, 1);
@@ -180,17 +180,17 @@ public class SPLScene extends Scene {
     m.setDiffAmbient(0.8f, 0.8f, 0.8f, 1);
     m.apply(gl);
     
-    Geometry post3 = CylinderGeometry.aroundZ(goalBarRadius/3, cfg.goalHeight, true, 8);
+    Geometry post3 = CylinderGeometry.posZ(goalBarRadius/3, goalBarRadius/3, cfg.goalHeight, 8, true);
     drawGeom(gl, post3, cfg.goalLength, goalBarRadius+cfg.goalWidth/2, cfg.goalHeight/2, 1, 1, 1);
     drawGeom(gl, post3, cfg.goalLength, -goalBarRadius-cfg.goalWidth/2, cfg.goalHeight/2, 1, 1, 1);
     
-    Geometry post4 = CylinderGeometry.aroundX(goalBarRadius/3, cfg.goalLength, true, 8);
+    Geometry post4 = CylinderGeometry.posX(goalBarRadius/3, goalBarRadius/3, cfg.goalLength, 8, true);
     drawGeom(gl, post4, cfg.goalLength/2, goalBarRadius+cfg.goalWidth/2, 0, 1, 1, 1);
     drawGeom(gl, post4, cfg.goalLength/2, goalBarRadius+cfg.goalWidth/2, cfg.goalHeight, 1, 1, 1);
     drawGeom(gl, post4, cfg.goalLength/2, -goalBarRadius-cfg.goalWidth/2, 0, 1, 1, 1);
     drawGeom(gl, post4, cfg.goalLength/2, -goalBarRadius-cfg.goalWidth/2, cfg.goalHeight, 1, 1, 1);
     
-    Geometry post5 = CylinderGeometry.aroundY(goalBarRadius/3, cfg.goalWidth + goalBarRadius * 2, true, 8);
+    Geometry post5 = CylinderGeometry.posY(goalBarRadius/3, goalBarRadius/3, cfg.goalWidth + goalBarRadius * 2, 8, true);
     drawGeom(gl, post5, cfg.goalLength, 0, 0, 1, 1, 1);
     drawGeom(gl, post5, cfg.goalLength, 0, cfg.goalHeight, 1, 1, 1);
 
@@ -206,7 +206,7 @@ public class SPLScene extends Scene {
   }
   
   private void planeGeom(GL2 gl, float x, float y, float scaleX, float scaleY) {
-    drawGeom(gl, PlaneGeometry.aroundZ(1, 1), x, y, 0, scaleX, scaleY, 1);
+    drawGeom(gl, PlaneGeometry.posZ(1, 1), x, y, 0, scaleX, scaleY, 1);
   }
 
 }
