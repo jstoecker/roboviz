@@ -93,7 +93,7 @@ public class DrawManager {
   private void renderNode(GL2 gl, DrawableNode node, List<Text> textNodes) {
     if (!node.isVisible())
       return;
-
+    
     for (Drawable drawable : node.getFront()) {
       if (drawable instanceof Text)
         textNodes.add((Text) drawable);

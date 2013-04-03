@@ -6,6 +6,7 @@ package roboviz.draw.drawable;
 
 import java.awt.EventQueue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +16,6 @@ import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
-
 
 /**
  * Contains drawables in a tree structure. A HashMap is used to quickly check if newly added
@@ -183,13 +183,17 @@ public class DrawableGraph implements TreeModel {
     if (name == null || name.isEmpty()) {
       swapBuffers(root);
     } else {
+      if (name.endsWith("."))
+        name = name.substring(0, name.length()-1);
       swapBuffers(nodeMap.get(name));
     }
   }
 
   private void swapBuffers(DrawableNode node) {
-    if (node == null)
+    if (node == null) {
       return;
+    }
+
     node.swapBuffers();
     if (node.children != null) {
       for (DrawableNode child : node.children) {

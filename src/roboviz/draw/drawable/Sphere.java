@@ -33,6 +33,8 @@ public class Sphere extends Drawable implements GeometryCache.Generator {
   
   @Override
   public void render(GL2 gl) {
+    gl.glEnable(GL2.GL_LIGHTING);
+    
     gl.glPushMatrix();
     gl.glTranslatef(position.x, position.y, 0);
     gl.glColor3f(color.x, color.y, color.z);

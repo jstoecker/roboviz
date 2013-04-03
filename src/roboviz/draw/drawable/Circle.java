@@ -36,6 +36,9 @@ public class Circle extends Drawable implements GeometryCache.Generator {
 
   @Override
   public void render(GL2 gl) {
+    
+    System.out.println("circle draw " + position);
+    
     gl.glPushMatrix();
     gl.glTranslatef(position.x, position.y, 0);
     gl.glColor3f(color.x, color.y, color.z);
