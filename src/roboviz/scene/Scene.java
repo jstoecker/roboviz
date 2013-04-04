@@ -13,9 +13,9 @@ import java.awt.event.MouseWheelListener;
 
 import javax.media.opengl.GL2;
 
+import jgl.cameras.Camera;
 import jgl.core.Viewport;
 import jgl.math.vector.Transform;
-import jgl.scene.cameras.Camera;
 
 /**
  * Scene template that provides default implementations for the user input.

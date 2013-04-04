@@ -5,8 +5,8 @@ package roboviz.draw.drawable;
 
 import javax.media.opengl.GL2;
 
+import jgl.geometry.extra.SphereGeometry;
 import jgl.math.vector.Vec3f;
-import jgl.scene.geometry.extra.SphereGeometry;
 import roboviz.util.GeometryCache;
 
 public class DrawableSphere extends Drawable implements GeometryCache.Generator {

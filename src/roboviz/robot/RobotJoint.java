@@ -54,6 +54,7 @@ public class RobotJoint extends RobotPart {
 
   public void setRadians(float radians) {
     this.radians = Maths.clamp(radians, minRadians, maxRadians);
+    updateLocalTransform();
   }
   
   public void setDegrees(float degrees) {

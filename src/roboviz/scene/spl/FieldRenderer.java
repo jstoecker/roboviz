@@ -3,11 +3,13 @@ package roboviz.scene.spl;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
-import jgl.scene.geometry.Geometry;
-import jgl.scene.geometry.extra.CircleGeometry;
-import jgl.scene.geometry.extra.CylinderGeometry;
-import jgl.scene.geometry.extra.PlaneGeometry;
-import jgl.scene.materials.Material;
+import jgl.geometry.Geometry;
+import jgl.geometry.extra.CircleGeometry;
+import jgl.geometry.extra.CylinderGeometry;
+import jgl.geometry.extra.PlaneGeometry;
+import jgl.math.vector.Vec4f;
+import jgl.shading.Material;
+import jgl.shading.PhongMaterial;
 
 /**
  * Renders the static field geometry: lines, goals, etc.
@@ -47,9 +49,9 @@ public class FieldRenderer {
     gl.glDisable(GL.GL_DEPTH_TEST);
 
     // green field
-    Material m = new Material();
-    m.setDiffAmbient(0.1f, 0.35f, 0.1f, 1);
-    m.apply(gl);
+    PhongMaterial m = new PhongMaterial();
+    m.diffuse = new Vec4f(0.1f, 0.35f, 0.1f, 1);
+    m.enable(gl);
     planeGeom(gl, 0, 0, cfg.fieldLength + 2 * cfg.borderStripWidth, cfg.fieldWidth + 2 * cfg.borderStripWidth);
 
     
@@ -64,9 +66,8 @@ public class FieldRenderer {
     gl.glEnable(GL2.GL_LIGHTING);
 
     // white field lines
-    m = new Material();
-    m.setDiffAmbient(1, 1, 1, 1);
-    m.apply(gl);
+    m = new PhongMaterial();
+    m.enable(gl);
     planeGeom(gl, 0, 0, cfg.lineWidth, cfg.fieldWidth);
     planeGeom(gl, -cfg.fieldLength / 2, 0, cfg.lineWidth, cfg.fieldWidth + cfg.lineWidth);
     planeGeom(gl, cfg.fieldLength / 2, 0, cfg.lineWidth, cfg.fieldWidth  + cfg.lineWidth);
@@ -103,9 +104,9 @@ public class FieldRenderer {
   private void drawGoal(GL2 gl) {
     float goalBarRadius = cfg.goalBarDiameter/2;
 
-    Material m = new Material();
-    m.setDiffAmbient(0.8f, 0.8f, 0.2f, 1);
-    m.apply(gl);
+    PhongMaterial m = new PhongMaterial();
+    m.diffuse = new Vec4f(0.8f, 0.8f, 0.2f, 1);
+    m.enable(gl);
     
     gl.glPushMatrix();
     gl.glTranslatef(cfg.fieldLength/2 + goalBarRadius/2, 0, 0);
@@ -116,9 +117,9 @@ public class FieldRenderer {
     drawGeom(gl, post, 0, -(cfg.goalWidth/2 + goalBarRadius), (cfg.goalHeight + goalBarRadius) / 2, 1, 1, 1);
     drawGeom(gl, post2, 0, 0, cfg.goalHeight + goalBarRadius, 1, 1, 1);
     
-    m = new Material();
-    m.setDiffAmbient(0.8f, 0.8f, 0.8f, 1);
-    m.apply(gl);
+    m = new PhongMaterial();
+    m.diffuse = new Vec4f(0.8f, 0.8f, 0.8f, 1);
+    m.enable(gl);
     
     Geometry post3 = CylinderGeometry.posZ(goalBarRadius/3, goalBarRadius/3, cfg.goalHeight, 8, true);
     drawGeom(gl, post3, cfg.goalLength, goalBarRadius+cfg.goalWidth/2, cfg.goalHeight/2, 1, 1, 1);

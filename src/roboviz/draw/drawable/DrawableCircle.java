@@ -5,9 +5,9 @@ package roboviz.draw.drawable;
 
 import javax.media.opengl.GL2;
 
+import jgl.geometry.extra.CircleGeometry;
 import jgl.math.vector.Vec2f;
 import jgl.math.vector.Vec3f;
-import jgl.scene.geometry.extra.CircleGeometry;
 import roboviz.util.GeometryCache;
 
 public class DrawableCircle extends Drawable implements GeometryCache.Generator {

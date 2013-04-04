@@ -58,6 +58,8 @@ public class RobotModel {
     joints.clear();
     
     for (RobotPart part : parts) {
+      partMap.put(part.name, part);
+      
       if (part.parent != null)
         part.parent.children.add(part);
       else

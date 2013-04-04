@@ -65,6 +65,9 @@ public class RoboViz implements GLEventListener {
   public void display(GLAutoDrawable drawable) {
     GL2 gl = drawable.getGL().getGL2();
 
+    if (newScene == null && scene == null)
+      return;
+    
     if (newScene != null) {
       if (scene != null)
         scene.dispose(gl);

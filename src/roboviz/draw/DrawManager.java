@@ -12,12 +12,12 @@ import java.util.List;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
+import jgl.cameras.Camera;
 import jgl.core.Viewport;
 import jgl.math.vector.Transform;
 import jgl.math.vector.Vec3f;
-import jgl.scene.cameras.Camera;
-import roboviz.draw.drawable.DrawableCircle;
 import roboviz.draw.drawable.Drawable;
+import roboviz.draw.drawable.DrawableCircle;
 import roboviz.draw.drawable.DrawableGraph;
 import roboviz.draw.drawable.DrawableNode;
 import roboviz.draw.drawable.DrawableSphere;

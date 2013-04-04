@@ -8,7 +8,7 @@ import java.util.LinkedList;
 
 import javax.media.opengl.GL2;
 
-import jgl.scene.geometry.Geometry;
+import jgl.geometry.Geometry;
 import roboviz.util.GeometryCache.Generator;
 
 /**

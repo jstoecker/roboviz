@@ -6,8 +6,8 @@ package roboviz.scene.basic;
 import javax.media.opengl.GL2;
 
 import jgl.core.Viewport;
+import jgl.geometry.extra.GridGeometry;
 import jgl.math.vector.Transform;
-import jgl.scene.geometry.extra.GridGeometry;
 import roboviz.scene.Scene;
 
 /**
