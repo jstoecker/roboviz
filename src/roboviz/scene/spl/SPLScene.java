@@ -37,17 +37,17 @@ public class SPLScene extends Scene {
     controller.setRadius(8);
     controller.setAltitude(Maths.PI / 4);
 
-//    for (int i = 0; i < robots.length; i++)
-//      robots[i] = RobotModel.loadFromYAML(new File("resources/robots/nao_v4/model.yml"));
-//    robotRenderer = new RobotRenderer("resources/robots/nao_v4/");
-//    
-//    try {
-//      robotController = new RobotController(robots, 32888);
-//    } catch (SocketException e) {
-//      e.printStackTrace();
-//    } catch (UnknownHostException e) {
-//      e.printStackTrace();
-//    }
+    for (int i = 0; i < robots.length; i++)
+      robots[i] = RobotModel.loadFromYAML(new File("resources/robots/nao_v4/model.yml"));
+    robotRenderer = new RobotRenderer("resources/robots/nao_v4/");
+    
+    try {
+      robotController = new RobotController(robots, 32888);
+    } catch (SocketException e) {
+      e.printStackTrace();
+    } catch (UnknownHostException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override
@@ -87,15 +87,15 @@ public class SPLScene extends Scene {
     lm.apply(gl);
 
     fieldRenderer.draw(gl);
-//    for (RobotModel robot : robots)
-//      robotRenderer.draw(gl, robot);
+    for (RobotModel robot : robots)
+      robotRenderer.draw(gl, robot);
   }
 
   @Override
   public void dispose(GL2 gl) {
     fieldRenderer.dispose(gl);
-//    robotRenderer.dispose(gl);
-//    robotController.shutdown();
+    robotRenderer.dispose(gl);
+    robotController.shutdown();
   }
 
   @Override
