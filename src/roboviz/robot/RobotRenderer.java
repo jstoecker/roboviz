@@ -16,12 +16,10 @@ import jgl.loaders.ObjLoader;
  */
 public class RobotRenderer {
 
-  private final RobotModel        model;
   private final String            resourceDir;
   private final Map<String, Mesh> meshes = new HashMap<String, Mesh>();
 
-  public RobotRenderer(RobotModel model, String resourceDir) {
-    this.model = model;
+  public RobotRenderer(String resourceDir) {
     this.resourceDir = resourceDir;
   }
 
@@ -30,13 +28,13 @@ public class RobotRenderer {
       mesh.dispose(gl);
   }
   
-  public void draw(GL2 gl) {
+  public void draw(GL2 gl, RobotModel model) {
     model.update();
     gl.glEnable(GL2.GL_NORMALIZE);
-    drawPart(gl, model.getRoot());
+    drawPart(gl, model.getRoot(), model.getGeometryScale());
   }
 
-  private void drawPart(GL2 gl, RobotPart part) {
+  private void drawPart(GL2 gl, RobotPart part, float scale) {
     if (part instanceof RobotGeometry) {
       RobotGeometry robotGeometry = (RobotGeometry) part;
 
@@ -49,7 +47,7 @@ public class RobotRenderer {
       if (mesh != null) {
         gl.glPushMatrix();
         gl.glMultMatrixf(part.getGlobalTransform().a, 0);
-        gl.glScalef(.001f, .001f, .001f);
+        gl.glScalef(scale, scale, scale);
         mesh.drawArrays(gl);
         gl.glPopMatrix();
       }
@@ -57,7 +55,7 @@ public class RobotRenderer {
 
     if (!part.getChildren().isEmpty()) {
       for (RobotPart child : part.getChildren())
-        drawPart(gl, child);
+        drawPart(gl, child, scale);
     }
   }
 }

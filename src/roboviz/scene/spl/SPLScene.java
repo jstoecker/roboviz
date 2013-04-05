@@ -6,6 +6,8 @@ package roboviz.scene.spl;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseWheelEvent;
 import java.io.File;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
@@ -26,6 +28,8 @@ public class SPLScene extends Scene {
   OrbitController controller    = new OrbitController();
   FieldRenderer   fieldRenderer = new FieldRenderer(cfg);
   RobotRenderer   robotRenderer;
+  RobotModel[]    robots        = new RobotModel[1];
+  RobotController robotController;
 
   public SPLScene() {
     controller.setUpY(false);
@@ -33,8 +37,17 @@ public class SPLScene extends Scene {
     controller.setRadius(8);
     controller.setAltitude(Maths.PI / 4);
 
-    RobotModel model = RobotModel.loadFromYAML(new File("resources/robots/nao_v4/model.yml"));
-    robotRenderer = new RobotRenderer(model, "resources/robots/nao_v4/");
+    for (int i = 0; i < robots.length; i++)
+      robots[i] = RobotModel.loadFromYAML(new File("resources/robots/nao_v4/model.yml"));
+    robotRenderer = new RobotRenderer("resources/robots/nao_v4/");
+    
+    try {
+      robotController = new RobotController(robots, 32888);
+    } catch (SocketException e) {
+      e.printStackTrace();
+    } catch (UnknownHostException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override
@@ -70,27 +83,19 @@ public class SPLScene extends Scene {
     LightModel lm = new LightModel();
     lm.addLight(new DirectionalLight(0, 0, 1));
 
-    DirectionalLight l2 = new DirectionalLight(0, .5f, 1);
-    l2.setAmbient(0, 0, 0, 0);
-    l2.setDiffuse(0.2f, 0.2f, 0.2f, 1);
-    lm.addLight(l2);
-
-    DirectionalLight l3 = new DirectionalLight(0, -.5f, 1);
-    l3.setAmbient(0, 0, 0, 0);
-    l3.setDiffuse(0.2f, 0.2f, 0.2f, 1);
-    lm.addLight(l3);
-
-    lm.setGlobalAmbient(0.5f, 0.5f, 0.5f, 1);
+    lm.setGlobalAmbient(0.3f, 0.3f, 0.3f, 1);
     lm.apply(gl);
 
     fieldRenderer.draw(gl);
-    robotRenderer.draw(gl);
+    for (RobotModel robot : robots)
+      robotRenderer.draw(gl, robot);
   }
 
   @Override
   public void dispose(GL2 gl) {
     fieldRenderer.dispose(gl);
     robotRenderer.dispose(gl);
+    robotController.shutdown();
   }
 
   @Override

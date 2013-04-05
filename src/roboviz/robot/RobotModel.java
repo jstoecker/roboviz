@@ -22,9 +22,10 @@ import org.yaml.snakeyaml.constructor.Constructor;
 public class RobotModel {
 
   private RobotPart              root;
-  private List<RobotPart>        parts   = new ArrayList<RobotPart>();
-  private List<RobotJoint>       joints  = new ArrayList<RobotJoint>();
-  private Map<String, RobotPart> partMap = new HashMap<String, RobotPart>();
+  private List<RobotPart>        parts         = new ArrayList<RobotPart>();
+  private List<RobotJoint>       joints        = new ArrayList<RobotJoint>();
+  private Map<String, RobotPart> partMap       = new HashMap<String, RobotPart>();
+  private float                  geometryScale = 1.0f;
 
   public RobotModel() {
     root = new RobotPart("root", null, new Vec3f(0));
@@ -51,19 +52,29 @@ public class RobotModel {
     root.update();
   }
   
+  public float getGeometryScale() {
+    return geometryScale;
+  }
+  
+  public void setGeometryScale(float geometryScale) {
+    this.geometryScale = geometryScale;
+  }
+
   public void setParts(List<RobotPart> parts) {
     this.parts = parts;
 
     partMap.clear();
     joints.clear();
-    
+
     for (RobotPart part : parts) {
       partMap.put(part.name, part);
-      
+
       if (part.parent != null)
         part.parent.children.add(part);
-      else
+      else {
         root.children.add(part);
+        part.parent = root;
+      }
 
       if (part instanceof RobotJoint) {
         joints.add((RobotJoint) part);

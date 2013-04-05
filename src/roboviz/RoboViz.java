@@ -65,9 +65,6 @@ public class RoboViz implements GLEventListener {
   public void display(GLAutoDrawable drawable) {
     GL2 gl = drawable.getGL().getGL2();
 
-    if (newScene == null && scene == null)
-      return;
-    
     if (newScene != null) {
       if (scene != null)
         scene.dispose(gl);
@@ -76,8 +73,11 @@ public class RoboViz implements GLEventListener {
       scene.resize(gl, viewport);
       newScene = null;
     }
-
+    
     gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
+    
+    if (newScene == null && scene == null)
+      return;
 
     scene.update(gl, 16);
     scene.render(gl, viewport);

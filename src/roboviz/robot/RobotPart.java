@@ -76,7 +76,7 @@ public class RobotPart {
     position.x = globalTransform.value(0, 3);
     position.y = globalTransform.value(1, 3);
     position.z = globalTransform.value(2, 3);
-
+    
     for (RobotPart child : children)
       child.update();
   }

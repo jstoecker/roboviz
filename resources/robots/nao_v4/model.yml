@@ -1,0 +1,332 @@
+# NAO version 4.0 (H21) Robot Model
+# Author: Justin Stoecker
+---
+
+# OBJ meshes are in millimeters; scene is in meters
+geometryScale: 0.001
+
+parts:
+
+# TORSO
+# ---------------------------------------
+
+  - !geometry     &torso
+    name        : Torso
+    parent      :
+    offset      : [0,0,0.33309]
+    file        : Torso.obj
+
+# HEAD
+# ---------------------------------------
+
+  - !joint        &head_yaw
+    name        : HeadYaw
+    parent      : *torso
+    offset      : [0, 0, 0.1265]
+    axis        : [0, 0, 1]
+    minDegrees  : -119.5
+    maxDegrees  : 119.5
+
+  - !geometry     &neck
+    name        : Neck
+    parent      : *head_yaw
+    file        : HeadYaw.obj
+
+  - !joint        &head_pitch
+    name        : HeadPitch
+    parent      : *neck
+    axis        : [0, 1, 0]
+    minDegrees  : -38.5
+    maxDegrees  : 29.5
+
+  - !geometry     &head
+    name        : Head
+    parent      : *head_pitch
+    file        : HeadPitch.obj
+
+# LEFT ARM
+# ---------------------------------------
+
+  - !joint        &l_shoulder_pitch
+    name        : LShoulderPitch
+    parent      : *torso
+    offset      : [0, 0.098, 0.1] 
+    axis        : [0, 1, 0] 
+    minDegrees  : -119.5
+    maxDegrees  : 119.5
+  
+  - !geometry     &l_shoulder
+    name        : Left Shoulder
+    parent      : *l_shoulder_pitch
+    file        : LShoulderPitch.obj
+
+  - !joint        &l_shoulder_roll
+    name        : LShoulderRoll
+    parent      : *l_shoulder
+    offset      : [0, 0, 0]
+    axis        : [0, 0, 1]
+    minDegrees  : -18
+    maxDegrees  : 76
+  
+  - !geometry     &l_bicep
+    name        : Left Bicep
+    parent      : *l_shoulder_roll
+    file        : LShoulderRoll.obj
+
+  - !joint        &l_elbow_yaw 
+    name        : LElbowYaw
+    parent      : *l_bicep
+    offset      : [0.105, 0.015, 0]
+    axis        : [1, 0, 0]
+    minDegrees  : -119.5
+    maxDegrees  : 119.5
+  
+  - !geometry     &l_elbow
+    name        : Left Elbow
+    parent      : *l_elbow_yaw
+    file        : LElbowYaw.obj
+  
+  - !joint        &l_elbow_roll
+    name        : LElbowRoll
+    parent      : *l_elbow
+    offset      : [0, 0, 0]
+    axis        : [0, 0, 1]
+    minDegrees  : -88.5
+    maxDegrees  : -2
+  
+  - !geometry     &l_forearm
+    name        : Left Forearm/Hand
+    parent      : *l_elbow_roll
+    offset      : [0, 0, 0]
+    file        : LElbowRollComplete.obj
+    translation : [0, 0, 0]
+    rotation    : [0, 0, 0]
+
+# RIGHT ARM
+# ---------------------------------------
+
+  - !joint        &r_shoulder_pitch
+    name        : RShoulderPitch
+    parent      : *torso
+    offset      : [0, -0.098, 0.1] 
+    axis        : [0, 1, 0] 
+    minDegrees  : -119.5
+    maxDegrees  : 119.5
+  
+  - !geometry     &r_shoulder
+    name        : Right Shoulder
+    parent      : *r_shoulder_pitch
+    file        : RShoulderPitch.obj
+  
+  - !joint        &r_shoulder_roll
+    name        : RShoulderRoll
+    parent      : *r_shoulder
+    offset      : [0, 0, 0]
+    axis        : [0, 0, 1]
+    minDegrees  : -76
+    maxDegrees  : 18
+  
+  - !geometry     &r_bicep
+    name        : Right Bicep
+    parent      : *r_shoulder_roll
+    offset      : [0, 0, 0]
+    file        : RShoulderRoll.obj
+    translation : [0, 0, 0]
+    rotation    : [0, 0, 0]
+
+  - !joint        &r_elbow_yaw
+    name        : RElbowYaw
+    parent      : *r_bicep
+    offset      : [0.105, -0.015, 0]
+    axis        : [1, 0, 0]
+    minDegrees  : -119.5
+    maxDegrees  : 119.5
+  
+  - !geometry     &r_elbow
+    name        : Right Elbow
+    parent      : *r_elbow_yaw
+    file        : RElbowYaw.obj
+
+  - !joint        &r_elbow_roll
+    name        : RElbowRoll
+    parent      : *r_elbow
+    offset      : [0, 0, 0]
+    axis        : [0, 0, 1]
+    minDegrees  : 2
+    maxDegrees  : 88.5
+  
+  - !geometry     &r_forearm
+    name        : Right Forearm/Hand
+    parent      : *r_elbow_roll
+    offset      : [0, 0, 0]
+    file        : RElbowRollComplete.obj
+    translation : [0, 0, 0]
+    rotation    : [0, 0, 0]
+
+# LEFT LEG
+# ---------------------------------------
+
+  - !joint        &l_hip_yawpitch
+    name        : LHipYawPitch
+    parent      : *torso
+    offset      : [0, 0.05, -0.085]
+    axis        : [0, 0.7071, -0.7071] 
+    minDegrees  : -66.62
+    maxDegrees  : 42.44
+
+  - !geometry     &l_pelvis
+    name        : Left Pelvis
+    parent      : *l_hip_yawpitch
+    file        : LHipYawPitch.obj
+
+  - !joint        &l_hip_roll
+    name        : LHipRoll
+    parent      : *l_pelvis
+    offset      : [0, 0, 0]
+    axis        : [1, 0, 0]
+    minDegrees  : -21.74
+    maxDegrees  : 45.29
+
+  - !geometry     &l_hip
+    name        : Left Hip
+    parent      : *l_hip_roll
+    file        : LHipRoll.obj
+
+  - !joint        &l_hip_pitch
+    name        : LHipPitch
+    parent      : *l_hip
+    offset      : [0, 0, 0]
+    axis        : [0, 1, 0]
+    minDegrees  : -101.63
+    maxDegrees  : 27.73
+
+  - !geometry     &l_thigh
+    name        : Left Thigh
+    parent      : *l_hip_pitch
+    offset      : [0, 0, 0]
+    file        : LHipPitch.obj
+    translation : [0, 0, 0]
+    rotation    : [0, 0, 0]
+
+  - !joint        &l_knee_pitch
+    name        : LKneePitch
+    parent      : *l_thigh
+    offset      : [0, 0, -0.1]
+    axis        : [0, 1, 0]
+    minDegrees  : -5.29
+    maxDegrees  : 121.04
+
+  - !geometry     &l_tibia
+    name        : Left Tibia
+    parent      : *l_knee_pitch
+    offset      : [0, 0, 0]
+    file        : LKneePitch.obj
+    translation : [0, 0, 0]
+    rotation    : [0, 0, 0]
+
+  - !joint        &l_ankle_pitch
+    name        : LAnklePitch
+    parent      : *l_tibia
+    offset      : [0, 0, -0.1029]
+    axis        : [0, 1, 0]
+    minDegrees  : -68.15
+    maxDegrees  : 52.86
+
+  - !geometry     &l_ankle
+    name        : Left Ankle
+    parent      : *l_ankle_pitch
+    file        : LAnklePitch.obj
+
+  - !joint        &l_ankle_roll
+    name        : LAnkleRoll
+    parent      : *l_ankle
+    offset      : [0, 0, 0]
+    axis        : [1, 0, 0]
+    minDegrees  : -22.79
+    maxDegrees  : 44.06
+
+  - !geometry     &l_foot
+    name        : Left Foot
+    parent      : *l_ankle_roll
+    file        : LAnkleRoll.obj
+
+# RIGHT LEG
+# ---------------------------------------
+
+  - !joint        &r_hip_yawpitch
+    name        : RHipYawPitch
+    parent      : *torso
+    offset      : [0, -0.05, -0.085]
+    axis        : [0, 0.7071, 0.7071] 
+    minDegrees  : -65.62
+    maxDegrees  : 42.44
+  
+  - !geometry     &r_pelvis
+    name        : Right Pelvis
+    parent      : *r_hip_yawpitch
+    file        : RHipYawPitch.obj
+
+  - !joint        &r_hip_roll
+    name        : RHipRoll
+    parent      : *r_pelvis
+    offset      : [0, 0, 0]
+    axis        : [1, 0, 0]
+    minDegrees  : -42.30
+    maxDegrees  : 23.76
+  
+  - !geometry     &r_hip
+    name        : Right Hip
+    parent      : *r_hip_roll
+    file        : RHipRoll.obj
+
+  - !joint        &r_hip_pitch
+    name        : RHipPitch
+    parent      : *r_hip
+    offset      : [0, 0, 0]
+    axis        : [0, 1, 0]
+    minDegrees  : -101.54
+    maxDegrees  : 27.82
+  
+  - !geometry     &r_thigh
+    name        : Right Thigh
+    parent      : *r_hip_pitch
+    file        : RHipPitch.obj
+
+  - !joint        &r_knee_pitch
+    name        : RKneePitch
+    parent      : *r_thigh
+    offset      : [0, 0, -0.1]
+    axis        : [0, 1, 0]
+    minDegrees  : -5.9
+    maxDegrees  : 121.47
+  
+  - !geometry     &r_tibia
+    name        : Right Tibia
+    parent      : *r_knee_pitch
+    file        : RKneePitch.obj
+  
+  - !joint        &r_ankle_pitch
+    name        : RAnklePitch
+    parent      : *r_tibia
+    offset      : [0, 0, -0.1029]
+    axis        : [0, 1, 0]
+    minDegrees  : -67.97
+    maxDegrees  : 53.4
+  
+  - !geometry     &r_ankle
+    name        : Right Ankle
+    parent      : *r_ankle_pitch
+    file        : RAnklePitch.obj
+  
+  - !joint        &r_ankle_roll
+    name        : RAnkleRoll
+    parent      : *r_ankle
+    offset      : [0, 0, 0]
+    axis        : [1, 0, 0]
+    minDegrees  : -45.03
+    maxDegrees  : 22.27
+  
+  - !geometry     &r_foot
+    name        : Right Foot
+    parent      : *r_ankle_roll
+    file        : RAnkleRoll.obj
