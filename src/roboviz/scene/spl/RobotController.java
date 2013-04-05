@@ -6,9 +6,12 @@ import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
+import java.util.List;
 
+import jgl.math.vector.Mat4f;
+import jgl.math.vector.Transform;
 import jgl.math.vector.Vec3f;
-import roboviz.draw.DrawManager;
+import roboviz.robot.RobotJoint;
 import roboviz.robot.RobotModel;
 
 /**
@@ -22,7 +25,6 @@ public class RobotController {
   byte[]                   buf         = new byte[BUFFER_SIZE];
 
   RobotModel[]             models;
-  DrawManager              manager;
   ReceiveThread            receiver    = new ReceiveThread();
   DatagramSocket           socket;
 
@@ -39,41 +41,20 @@ public class RobotController {
       socket.close();
   }
 
-  private void parse(String message) {
-    String[] tokens = message.split("\\s++");
-    int id = Integer.parseInt(tokens[0]);
-    int joint = Integer.parseInt(tokens[1]);
-    
-    if (joint == 255) {
-      float x = Float.parseFloat(tokens[2]);
-      float y = Float.parseFloat(tokens[3]);
-      float z = Float.parseFloat(tokens[4]);
-      models[id].getRoot().setOffset(new Vec3f(x,y,z));
-    } else {
-      float radians = Float.parseFloat(tokens[2]);
-      models[id].getJoints().get(joint).setRadians(radians);
-    }
-  }
-  
   private void parse(ByteBuffer buf) {
-    while (buf.remaining() >= 8) {
-      int id = getUByte(buf);
-      int joint = getUByte(buf);
-      
-      if (joint == 255) {
-        // joint 255 means translate x,y,z
-        float x = getFloat(buf);
-        float y = getFloat(buf);
-        float z = getFloat(buf);
-        if (id < models.length)
-          models[id].getRoot().setOffset(new Vec3f(x, y, z));
-      } else {
-        // set joint radians
-        float radians = getFloat(buf);
-        if (id < models.length && joint < models[id].getJoints().size())
-          models[id].getJoints().get(joint).setRadians(radians);
-      }
-    }
+    RobotModel model = models[getUByte(buf)];
+    Vec3f center = new Vec3f(getFloat(buf), getFloat(buf), getFloat(buf));
+    Vec3f forward = new Vec3f(getFloat(buf), getFloat(buf), getFloat(buf));
+    Vec3f up = new Vec3f(getFloat(buf), getFloat(buf), getFloat(buf));
+    
+    List<RobotJoint> joints = model.getJoints();
+    for (int i = 0; i < 22; i++)
+      joints.get(i).setRadians(getFloat(buf));
+    
+    Mat4f m = Transform.lookAt(0, 0, 0, -forward.x, -forward.y, -forward.z, up.x, up.y, up.z).inverse();
+    m = m.times(Transform.rotationX(-Math.PI/2));
+    m = m.times(Transform.rotationZ(-Math.PI/2));
+    model.getRoot().setLocalTransform(Transform.translation(center).times(m));
   }
 
   static int getUByte(ByteBuffer buf) {
@@ -96,8 +77,7 @@ public class RobotController {
         try {
           DatagramPacket packet = new DatagramPacket(buf, buf.length);
           socket.receive(packet);
-          parse(new String(packet.getData(), 0, packet.getLength()).trim());
-//          parse(ByteBuffer.wrap(packet.getData(), 0, packet.getLength()));
+          parse(ByteBuffer.wrap(packet.getData(), 0, packet.getLength()));
         } catch (IOException e) {
         }
       }

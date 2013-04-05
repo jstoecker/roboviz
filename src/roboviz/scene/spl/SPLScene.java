@@ -16,6 +16,7 @@ import jgl.cameras.OrbitController;
 import jgl.core.Viewport;
 import jgl.math.Maths;
 import jgl.math.vector.Transform;
+import jgl.math.vector.Vec3f;
 import jgl.shading.DirectionalLight;
 import jgl.shading.LightModel;
 import roboviz.robot.RobotModel;
@@ -28,7 +29,7 @@ public class SPLScene extends Scene {
   OrbitController controller    = new OrbitController();
   FieldRenderer   fieldRenderer = new FieldRenderer(cfg);
   RobotRenderer   robotRenderer;
-  RobotModel[]    robots        = new RobotModel[1];
+  RobotModel[]    robots        = new RobotModel[5];
   RobotController robotController;
 
   public SPLScene() {
@@ -37,10 +38,12 @@ public class SPLScene extends Scene {
     controller.setRadius(8);
     controller.setAltitude(Maths.PI / 4);
 
-    for (int i = 0; i < robots.length; i++)
+    for (int i = 0; i < robots.length; i++) {
       robots[i] = RobotModel.loadFromYAML(new File("resources/robots/nao_v4/model.yml"));
+      robots[i].getRoot().setOffset(new Vec3f(-i, 3.5f, 0));
+    }
     robotRenderer = new RobotRenderer("resources/robots/nao_v4/");
-    
+
     try {
       robotController = new RobotController(robots, 32888);
     } catch (SocketException e) {
@@ -87,8 +90,10 @@ public class SPLScene extends Scene {
     lm.apply(gl);
 
     fieldRenderer.draw(gl);
-    for (RobotModel robot : robots)
-      robotRenderer.draw(gl, robot);
+    // only drawing 1 for now; need to use VBOs, rendering slow right now
+    for (int i = 0; i < 1/*robots.length*/; i++) {
+      robotRenderer.draw(gl, robots[i]);
+    }
   }
 
   @Override

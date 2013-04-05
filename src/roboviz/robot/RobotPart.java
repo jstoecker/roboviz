@@ -69,6 +69,10 @@ public class RobotPart {
   protected void updateLocalTransform() {
     localTransform = Transform.translation(offset);
   }
+  
+  public void setLocalTransform(Mat4f localTransform) {
+    this.localTransform = localTransform;
+  }
 
   protected void update() {
     globalTransform = (parent == null) ? localTransform 
