@@ -6,7 +6,6 @@ import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 
 import jgl.math.vector.Vec3f;
 import roboviz.draw.DrawManager;
