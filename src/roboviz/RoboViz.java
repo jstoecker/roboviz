@@ -27,6 +27,7 @@ import jgl.core.Viewport;
 import roboviz.draw.DrawManager;
 import roboviz.scene.Scene;
 import roboviz.scene.basic.BasicScene;
+import roboviz.scene.sim3d.Sim3dScene;
 import roboviz.scene.spl.SPLScene;
 
 import com.jogamp.newt.event.KeyEvent;
@@ -116,7 +117,7 @@ public class RoboViz implements GLEventListener {
     MenuItem rcs3dItem = new MenuItem("RoboCup Simulation 3D");
     rcs3dItem.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        setScene(new BasicScene());
+        setScene(new Sim3dScene());
       }
     });
     sceneMenu.add(rcs3dItem);

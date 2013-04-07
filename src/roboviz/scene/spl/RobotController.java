@@ -51,9 +51,13 @@ public class RobotController {
     for (int i = 0; i < 22; i++)
       joints.get(i).setRadians(getFloat(buf));
     
-    Mat4f m = Transform.lookAt(0, 0, 0, -forward.x, -forward.y, -forward.z, up.x, up.y, up.z).inverse();
-    m = m.times(Transform.rotationX(-Math.PI/2));
-    m = m.times(Transform.rotationZ(-Math.PI/2));
+    Vec3f left = up.cross(forward).normalized();
+    Mat4f m = new Mat4f(
+        forward.x, left.x, up.x, 0,
+        forward.y, left.y, up.y, 0,
+        forward.z, left.z, up.z, 0,
+        0, 0, 0, 1).inverse();
+    
     model.getRoot().setLocalTransform(Transform.translation(center).times(m));
   }
 

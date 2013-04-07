@@ -39,10 +39,10 @@ public class SPLScene extends Scene {
     controller.setAltitude(Maths.PI / 4);
 
     for (int i = 0; i < robots.length; i++) {
-      robots[i] = RobotModel.loadFromYAML(new File("resources/robots/nao_v4/model.yml"));
+      robots[i] = RobotModel.loadFromYAML(new File("resources/spl/nao_v4/model.yml"));
       robots[i].getRoot().setOffset(new Vec3f(-i, 3.5f, 0));
     }
-    robotRenderer = new RobotRenderer("resources/robots/nao_v4/");
+    robotRenderer = new RobotRenderer("resources/spl/nao_v4/");
 
     try {
       robotController = new RobotController(robots, 32888);
