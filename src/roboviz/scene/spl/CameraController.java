@@ -1,31 +1,48 @@
 package roboviz.scene.spl;
 
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
 import jgl.cameras.Camera;
+import jgl.math.Maths;
+import jgl.math.vector.ConstVec3f;
+import jgl.math.vector.Transform;
 import jgl.math.vector.Vec3f;
 
-public class CameraController implements KeyListener, MouseWheelListener {
+public class CameraController implements KeyListener, MouseWheelListener, MouseMotionListener,
+    MouseListener {
 
-  float  horizontal = 0;
-  float  forward    = 0;
-  float  vertical   = 0;
-  float  yaw        = 0;
+  private static final float PITCH_EPSILON  = 0.000001f;
+  private static final float MAX_PITCH      = Maths.PI / 2 - PITCH_EPSILON;
+  private static final float MIN_PITCH      = -MAX_PITCH;
 
-  Vec3f  up;
-  Vec3f  target     = new Vec3f(0);
-  Camera camera;
+  private Camera             camera;
 
-  /** If false, Z is up; if true, Y is up. */
-  public void setUpY(boolean yUp) {
-    up = (yUp ? Vec3f.axisY() : Vec3f.axisZ());
-  }
+  private Point              anchorPoint    = null;
+  private float              anchorAltitude = 0;
+  private float              anchorAzimuth  = 0;
+
+  private float              horizontal     = 0;
+  private float              forward        = 0;
+  private float              vertical       = 0;
+  private float              azimuth        = 0;
+  private float              altitude       = 0;
 
   public void setCamera(Camera camera) {
     this.camera = camera;
+
+    // calculate current angles
+    ConstVec3f fwd = camera.getForward();
+    Vec3f spherical = Maths.cartesianToSpherical(fwd.x(), fwd.y(), fwd.z(), false);
+    this.altitude = spherical.y;
+    this.azimuth = spherical.z;
+    System.out.println(altitude + " , " + azimuth);
   }
 
   public void update(float elapsedMS) {
@@ -35,7 +52,6 @@ public class CameraController implements KeyListener, MouseWheelListener {
     boolean changed = horizontal != 0;
     changed = changed || forward != 0;
     changed = changed || vertical != 0;
-    changed = changed || yaw != 0;
 
     if (changed)
       updateView(elapsedMS);
@@ -49,7 +65,6 @@ public class CameraController implements KeyListener, MouseWheelListener {
     camera.translate(f.times(scale * forward));
     camera.translateRight(horizontal * scale);
     camera.translate(0, 0, vertical * scale);
-    camera.rotateZ(yaw);
   }
 
   @Override
@@ -59,10 +74,6 @@ public class CameraController implements KeyListener, MouseWheelListener {
         vertical = -1;
       } else if (e.getKeyCode() == KeyEvent.VK_S) {
         vertical = 1;
-      } else if (e.getKeyCode() == KeyEvent.VK_D) {
-        yaw = -0.01f;
-      } else if (e.getKeyCode() == KeyEvent.VK_A) {
-        yaw = 0.01f;
       }
     } else {
       if (e.getKeyCode() == KeyEvent.VK_A) {
@@ -84,10 +95,6 @@ public class CameraController implements KeyListener, MouseWheelListener {
         vertical = 0;
       } else if (e.getKeyCode() == KeyEvent.VK_S && vertical != 0) {
         vertical = 0;
-      } else if (e.getKeyCode() == KeyEvent.VK_D && yaw != 0) {
-        yaw = 0;
-      } else if (e.getKeyCode() == KeyEvent.VK_A && yaw != 0) {
-        yaw = 0;
       }
     } else {
       if (e.getKeyCode() == KeyEvent.VK_A && horizontal != 0) {
@@ -100,7 +107,57 @@ public class CameraController implements KeyListener, MouseWheelListener {
         forward = 0;
       }
     }
+  }
 
+  public void setRotation(float altitude, float azimuth) {
+    if (camera == null)
+      return;
+
+    this.altitude = Maths.clamp(altitude, MIN_PITCH, MAX_PITCH);
+    this.azimuth = azimuth;
+
+    Vec3f forward = Maths.sphericalToCartesian(1, this.altitude, this.azimuth, false);
+    Vec3f right = forward.cross(Vec3f.axisZ()).normalize();
+    Vec3f up = right.cross(forward).normalize();
+    ConstVec3f eye = camera.getEye();
+    Vec3f ctr = camera.getEye().plus(forward);
+
+    camera.setView(Transform.lookAt(eye.x(), eye.y(), eye.z(), ctr.x, ctr.y, ctr.z, up.x, up.y, up.z));
+  }
+
+  @Override
+  public void mouseDragged(MouseEvent e) {
+    float scale = -0.005f;
+    float deltaAzi = (e.getX() - anchorPoint.x) * scale;
+    float deltaAlt = (e.getY() - anchorPoint.y) * scale;
+    setRotation(anchorAltitude + deltaAlt, anchorAzimuth + deltaAzi);
+  }
+
+  @Override
+  public void mousePressed(MouseEvent e) {
+    anchorPoint = e.getPoint();
+    anchorAltitude = altitude;
+    anchorAzimuth = azimuth;
+  }
+
+  @Override
+  public void mouseReleased(MouseEvent e) {
+  }
+
+  @Override
+  public void mouseMoved(MouseEvent e) {
+  }
+
+  @Override
+  public void mouseClicked(MouseEvent e) {
+  }
+
+  @Override
+  public void mouseEntered(MouseEvent e) {
+  }
+
+  @Override
+  public void mouseExited(MouseEvent e) {
   }
 
   @Override

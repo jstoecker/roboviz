@@ -25,7 +25,8 @@ public class RobotController implements SceneCommandParser {
 
   @Override
   public void parse(ByteBuffer buf) {
-    RobotModel model = models[getUByte(buf)];
+    int modelIndex = getUByte(buf);
+    RobotModel model = models[modelIndex];
     Vec3f center = new Vec3f(getFloat(buf), getFloat(buf), getFloat(buf));
     Vec3f forward = new Vec3f(getFloat(buf), getFloat(buf), getFloat(buf));
     Vec3f up = new Vec3f(getFloat(buf), getFloat(buf), getFloat(buf));

@@ -4,27 +4,26 @@
 package roboviz.scene.spl;
 
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.io.File;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
-import jgl.cameras.OrbitController;
 import jgl.core.Viewport;
-import jgl.math.Maths;
 import jgl.math.vector.Transform;
 import jgl.math.vector.Vec3f;
 import jgl.shading.DirectionalLight;
 import jgl.shading.LightModel;
+import roboviz.draw.DrawManager;
 import roboviz.robot.RobotModel;
 import roboviz.robot.RobotRenderer;
 import roboviz.scene.Scene;
 
 public class SPLScene extends Scene {
 
+  DrawManager      drawManager;
   Config           cfg           = new Config(new File("/Users/justin/Desktop/splscene.cfg"));
   CameraController controller    = new CameraController();
   FieldRenderer    fieldRenderer = new FieldRenderer(cfg);
@@ -32,8 +31,9 @@ public class SPLScene extends Scene {
   RobotModel[]     robots        = new RobotModel[5];
   RobotController  robotController;
 
-  public SPLScene() {
-    controller.setUpY(false);
+  public SPLScene(DrawManager drawManager) {
+    this.drawManager = drawManager;
+    camera.setView(Transform.lookAt(0, -5, 5, 0, 0, 0, 0, 0, 1));
     controller.setCamera(camera);
 
     for (int i = 0; i < robots.length; i++) {
@@ -42,21 +42,8 @@ public class SPLScene extends Scene {
     }
     robotRenderer = new RobotRenderer("resources/spl/nao_v4/");
     robotController = new RobotController(robots);
-  }
 
-  @Override
-  public void keyPressed(KeyEvent e) {
-    controller.keyPressed(e);
-  }
-
-  @Override
-  public void keyReleased(KeyEvent e) {
-    controller.keyReleased(e);
-  }
-
-  @Override
-  public void mouseWheelMoved(MouseWheelEvent e) {
-    controller.mouseWheelMoved(e);
+    drawManager.getParser().setSceneCmdParser(robotController);
   }
 
   @Override
@@ -91,10 +78,36 @@ public class SPLScene extends Scene {
   public void dispose(GL2 gl) {
     fieldRenderer.dispose(gl);
     robotRenderer.dispose(gl);
+    drawManager.getParser().setSceneCmdParser(null);
   }
 
   @Override
   public void resize(GL2 gl, Viewport viewport) {
     camera.setProjection(Transform.perspective(60, viewport.aspect(), 0.1f, 100));
+  }
+
+  @Override
+  public void keyPressed(KeyEvent e) {
+    controller.keyPressed(e);
+  }
+
+  @Override
+  public void keyReleased(KeyEvent e) {
+    controller.keyReleased(e);
+  }
+
+  @Override
+  public void mouseWheelMoved(MouseWheelEvent e) {
+    controller.mouseWheelMoved(e);
+  }
+
+  @Override
+  public void mousePressed(MouseEvent e) {
+    controller.mousePressed(e);
+  }
+
+  @Override
+  public void mouseDragged(MouseEvent e) {
+    controller.mouseDragged(e);
   }
 }

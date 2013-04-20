@@ -40,6 +40,10 @@ public class DrawManager {
   public DrawPanel getDrawPanel() {
     return drawPanel;
   }
+  
+  public Parser getParser() {
+    return parser;
+  }
 
   public void init() {
     try {

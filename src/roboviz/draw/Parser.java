@@ -21,7 +21,7 @@ import roboviz.draw.drawable.DrawableText;
  * 
  * @author justin
  */
-class Parser {
+public class Parser {
 
   private static final int   CONTROL               = 0;
   private static final int   CONTROL_SWAP_BUFFERS  = 0;
@@ -63,8 +63,9 @@ class Parser {
           parseDrawText(buf);
           break;
         case SCENE_COMMAND:
-          if (sceneCmdParser != null)
+          if (sceneCmdParser != null) {
             sceneCmdParser.parse(buf);
+          }
           break;
         default:
           break;

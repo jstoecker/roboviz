@@ -59,7 +59,7 @@ public class RoboViz implements GLEventListener {
 
     initGUI();
     
-    setScene(new SPLScene());
+    setScene(new SPLScene(drawManager));
 
     animator.start();
   }
@@ -137,7 +137,7 @@ public class RoboViz implements GLEventListener {
     MenuItem rcsplItem = new MenuItem("RoboCup Standard Platform");
     rcsplItem.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        setScene(new SPLScene());
+        setScene(new SPLScene(drawManager));
       }
     });
     sceneMenu.add(rcsplItem);

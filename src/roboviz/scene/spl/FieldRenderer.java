@@ -8,7 +8,6 @@ import jgl.geometry.extra.CircleGeometry;
 import jgl.geometry.extra.CylinderGeometry;
 import jgl.geometry.extra.PlaneGeometry;
 import jgl.math.vector.Vec4f;
-import jgl.shading.Material;
 import jgl.shading.PhongMaterial;
 
 /**
