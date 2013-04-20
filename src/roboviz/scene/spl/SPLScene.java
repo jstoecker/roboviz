@@ -41,14 +41,7 @@ public class SPLScene extends Scene {
       robots[i].getRoot().setOffset(new Vec3f(-i, 3.5f, 0));
     }
     robotRenderer = new RobotRenderer("resources/spl/nao_v4/");
-
-    try {
-      robotController = new RobotController(robots, 32888);
-    } catch (SocketException e) {
-      e.printStackTrace();
-    } catch (UnknownHostException e) {
-      e.printStackTrace();
-    }
+    robotController = new RobotController(robots);
   }
 
   @Override
@@ -98,7 +91,6 @@ public class SPLScene extends Scene {
   public void dispose(GL2 gl) {
     fieldRenderer.dispose(gl);
     robotRenderer.dispose(gl);
-    robotController.shutdown();
   }
 
   @Override

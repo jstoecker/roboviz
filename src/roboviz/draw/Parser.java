@@ -23,23 +23,26 @@ import roboviz.draw.drawable.DrawableText;
  */
 class Parser {
 
-  private static final int CONTROL               = 0;
-  private static final int CONTROL_SWAP_BUFFERS  = 0;
-  private static final int CONTROL_SET_FRAME     = 1;
+  private static final int   CONTROL               = 0;
+  private static final int   CONTROL_SWAP_BUFFERS  = 0;
+  private static final int   CONTROL_SET_FRAME     = 1;
 
-  private static final int DRAW_SHAPE            = 1;
-  private static final int DRAW_SHAPE_CIRCLE     = 0;
-  private static final int DRAW_SHAPE_LINE       = 1;
-  private static final int DRAW_SHAPE_POINT      = 2;
-  private static final int DRAW_SHAPE_SPHERE     = 3;
-  private static final int DRAW_SHAPE_POLYGON    = 4;
+  private static final int   DRAW_SHAPE            = 1;
+  private static final int   DRAW_SHAPE_CIRCLE     = 0;
+  private static final int   DRAW_SHAPE_LINE       = 1;
+  private static final int   DRAW_SHAPE_POINT      = 2;
+  private static final int   DRAW_SHAPE_SPHERE     = 3;
+  private static final int   DRAW_SHAPE_POLYGON    = 4;
 
-  private static final int DRAW_TEXT             = 2;
-  private static final int DRAW_TEXT_STATIC      = 0;
-  private static final int DRAW_TEXT_FLOAT       = 1;
-  private static final int DRAW_TEXT_FLOAT_CLEAR = 2;
+  private static final int   DRAW_TEXT             = 2;
+  private static final int   DRAW_TEXT_STATIC      = 0;
+  private static final int   DRAW_TEXT_FLOAT       = 1;
+  private static final int   DRAW_TEXT_FLOAT_CLEAR = 2;
 
-  DrawManager              manager;
+  private static final int   SCENE_COMMAND         = 3;
+
+  private DrawManager        manager;
+  private SceneCommandParser sceneCmdParser;
 
   public Parser(DrawManager manager) {
     this.manager = manager;
@@ -48,26 +51,34 @@ class Parser {
   public void parse(ByteBuffer buf) {
     int pos = 0;
     try {
-    while (buf.hasRemaining()) {
-      switch (getUnsignedByte(buf)) {
-      case CONTROL:
-        parseControl(buf);
-        break;
-      case DRAW_SHAPE:
-        parseDrawShape(buf);
-        break;
-      case DRAW_TEXT:
-        parseDrawText(buf);
-        break;
-      default:
-        break;
+      while (buf.hasRemaining()) {
+        switch (getUnsignedByte(buf)) {
+        case CONTROL:
+          parseControl(buf);
+          break;
+        case DRAW_SHAPE:
+          parseDrawShape(buf);
+          break;
+        case DRAW_TEXT:
+          parseDrawText(buf);
+          break;
+        case SCENE_COMMAND:
+          if (sceneCmdParser != null)
+            sceneCmdParser.parse(buf);
+          break;
+        default:
+          break;
+        }
+        pos = buf.position();
       }
-      pos = buf.position();
-    }
     } catch (Exception e) {
       int end = buf.position();
       System.out.printf("Bad parse: [%d, %d] : %s\n", pos, end, e.getMessage());
     }
+  }
+  
+  public void setSceneCmdParser(SceneCommandParser sceneCmdParser) {
+    this.sceneCmdParser = sceneCmdParser;
   }
 
   private void parseControl(ByteBuffer buf) {

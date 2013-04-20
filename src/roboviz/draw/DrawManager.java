@@ -4,6 +4,7 @@
 package roboviz.draw;
 
 import java.awt.Font;
+import java.awt.Point;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -15,7 +16,6 @@ import javax.media.opengl.GL2;
 import jgl.cameras.Camera;
 import jgl.core.Viewport;
 import jgl.math.vector.Transform;
-import jgl.math.vector.Vec3f;
 import roboviz.draw.drawable.Drawable;
 import roboviz.draw.drawable.DrawableCircle;
 import roboviz.draw.drawable.DrawableGraph;
@@ -79,9 +79,9 @@ public class DrawManager {
     if (texts.size() > 0) {
       textRenderer.beginRendering(viewport.width, viewport.height);
       for (DrawableText text : texts) {
-        Vec3f p = Transform.worldToWindow(viewport, camera, text.position);
+        Point p = Transform.worldToWindow(camera, viewport, text.position);
         textRenderer.setColor(text.color.x, text.color.y, text.color.z, 1);
-        textRenderer.draw3D(text.text, p.x, p.y, p.z, 1);
+        textRenderer.draw3D(text.text, p.x, p.y, 0, 1);
       }
       textRenderer.endRendering();
     }
