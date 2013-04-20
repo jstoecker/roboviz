@@ -10,7 +10,7 @@ public class Sim3dScene extends Scene {
   Monitor monitor;
   
   public Sim3dScene() {
-    monitor = new Monitor("localhost", 32769, true, 1000);
+    monitor = new Monitor("10.211.55.3", 3200, true, 1000);
   }
   
   @Override
@@ -18,7 +18,7 @@ public class Sim3dScene extends Scene {
   }
 
   @Override
-  public void update(GL2 gl, double elapsedMS) {
+  public void update(GL2 gl, float elapsedMS) {
   }
 
   @Override

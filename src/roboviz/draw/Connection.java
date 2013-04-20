@@ -46,7 +46,7 @@ class Connection {
         try {
           DatagramPacket packet = new DatagramPacket(buf, buf.length);
           socket.receive(packet);
-
+          
           ByteBuffer byteBuffer = ByteBuffer.wrap(packet.getData(), 0, packet.getLength());
           manager.parser.parse(byteBuffer);
 

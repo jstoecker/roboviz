@@ -82,7 +82,7 @@ public abstract class Scene implements KeyListener, MouseListener, MouseMotionLi
 
   public abstract void init(GL2 gl);
 
-  public abstract void update(GL2 gl, double elapsedMS);
+  public abstract void update(GL2 gl, float elapsedMS);
 
   public abstract void render(GL2 gl, Viewport viewport);
 

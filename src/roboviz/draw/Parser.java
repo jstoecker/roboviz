@@ -46,6 +46,8 @@ class Parser {
   }
 
   public void parse(ByteBuffer buf) {
+    int pos = 0;
+    try {
     while (buf.hasRemaining()) {
       switch (getUnsignedByte(buf)) {
       case CONTROL:
@@ -60,6 +62,11 @@ class Parser {
       default:
         break;
       }
+      pos = buf.position();
+    }
+    } catch (Exception e) {
+      int end = buf.position();
+      System.out.printf("Bad parse: [%d, %d] : %s\n", pos, end, e.getMessage());
     }
   }
 

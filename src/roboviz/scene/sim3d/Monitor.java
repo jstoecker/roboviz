@@ -8,6 +8,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 
 import jgl.math.vector.ConstVec3f;
+import roboviz.scene.sim3d.state.GameState;
 import roboviz.scene.sim3d.state.SExpression;
 import roboviz.scene.sim3d.state.SceneGraph;
 
@@ -19,6 +20,7 @@ import roboviz.scene.sim3d.state.SceneGraph;
  */
 public class Monitor {
 
+  private GameState         gameState   = new GameState();
   private SceneGraph        sceneGraph  = new SceneGraph();
   private AutoConnectThread autoConnectThread;
   private MessageReceiver   inThread;
@@ -37,7 +39,7 @@ public class Monitor {
     this.autoConnectDelay = delay;
     setAutoConnect(autoConnect);
   }
-  
+
   private void setConnected(boolean connected) {
     this.connected = connected;
     if (connected)
@@ -150,9 +152,13 @@ public class Monitor {
   public int getPort() {
     return serverPort;
   }
-  
+
   public SceneGraph getSceneGraph() {
     return sceneGraph;
+  }
+  
+  public GameState getGameState() {
+    return gameState;
   }
 
   public void setAutoConnectDelay(int delay) {
@@ -236,9 +242,8 @@ public class Monitor {
           message = readMessage();
           if (message != null) {
             try {
-              System.out.println(message);
               ArrayList<SExpression> expressions = SExpression.parse(message);
-              // gameState.update(expressions.get(0));
+              gameState.update(expressions.get(0));
               sceneGraph.update(expressions.get(1), expressions.get(2));
             } catch (ParseException e) {
               e.printStackTrace();

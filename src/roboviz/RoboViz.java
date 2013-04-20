@@ -50,6 +50,8 @@ public class RoboViz implements GLEventListener {
   AnimatorBase animator;
   GLCanvas     canvas;
 
+  long         lastTime;
+
   public RoboViz(GLCanvas canvas) {
     this.canvas = canvas;
     canvas.addGLEventListener(this);
@@ -80,9 +82,11 @@ public class RoboViz implements GLEventListener {
     if (newScene == null && scene == null)
       return;
 
-    scene.update(gl, 16);
+    long now = System.currentTimeMillis();
+    scene.update(gl, now - lastTime);
     scene.render(gl, viewport);
     drawManager.render(gl, scene.getCamera(), viewport);
+    lastTime = now;
   }
 
   private void initGUI() {

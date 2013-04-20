@@ -27,7 +27,7 @@ public class BasicScene extends Scene {
   }
 
   @Override
-  public void update(GL2 gl, double elapsedMS) {
+  public void update(GL2 gl, float elapsedMS) {
   }
 
   @Override

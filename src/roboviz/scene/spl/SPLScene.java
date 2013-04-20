@@ -25,18 +25,16 @@ import roboviz.scene.Scene;
 
 public class SPLScene extends Scene {
 
-  Config          cfg           = new Config(new File("/Users/justin/Desktop/splscene.cfg"));
-  OrbitController controller    = new OrbitController();
-  FieldRenderer   fieldRenderer = new FieldRenderer(cfg);
-  RobotRenderer   robotRenderer;
-  RobotModel[]    robots        = new RobotModel[5];
-  RobotController robotController;
+  Config           cfg           = new Config(new File("/Users/justin/Desktop/splscene.cfg"));
+  CameraController controller    = new CameraController();
+  FieldRenderer    fieldRenderer = new FieldRenderer(cfg);
+  RobotRenderer    robotRenderer;
+  RobotModel[]     robots        = new RobotModel[5];
+  RobotController  robotController;
 
   public SPLScene() {
     controller.setUpY(false);
     controller.setCamera(camera);
-    controller.setRadius(8);
-    controller.setAltitude(Maths.PI / 4);
 
     for (int i = 0; i < robots.length; i++) {
       robots[i] = RobotModel.loadFromYAML(new File("resources/spl/nao_v4/model.yml"));
@@ -75,12 +73,12 @@ public class SPLScene extends Scene {
   }
 
   @Override
-  public void update(GL2 gl, double elapsedMS) {
+  public void update(GL2 gl, float elapsedMS) {
+    controller.update(elapsedMS);
   }
 
   @Override
   public void render(GL2 gl, Viewport viewport) {
-    controller.update();
     camera.apply(gl);
 
     LightModel lm = new LightModel();
@@ -91,7 +89,7 @@ public class SPLScene extends Scene {
 
     fieldRenderer.draw(gl);
     // only drawing 1 for now; need to use VBOs, rendering slow right now
-    for (int i = 0; i < 1/*robots.length*/; i++) {
+    for (int i = 0; i < 1/* robots.length */; i++) {
       robotRenderer.draw(gl, robots[i]);
     }
   }
