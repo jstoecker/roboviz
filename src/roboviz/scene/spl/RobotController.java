@@ -28,9 +28,9 @@ public class RobotController implements SceneCommandParser {
     int modelIndex = getUByte(buf);
     RobotModel model = models[modelIndex];
     Vec3f center = new Vec3f(getFloat(buf), getFloat(buf), getFloat(buf));
-    Vec3f forward = new Vec3f(getFloat(buf), getFloat(buf), getFloat(buf));
-    Vec3f up = new Vec3f(getFloat(buf), getFloat(buf), getFloat(buf));
-
+    Vec3f forward = new Vec3f(getFloat(buf), getFloat(buf), getFloat(buf)).normalize();
+    Vec3f up = new Vec3f(getFloat(buf), getFloat(buf), getFloat(buf)).normalize();
+    
     List<RobotJoint> joints = model.getJoints();
     for (int i = 0; i < 22; i++)
       joints.get(i).setRadians(getFloat(buf));
@@ -39,6 +39,11 @@ public class RobotController implements SceneCommandParser {
     Mat4f m = new Mat4f(forward.x, left.x, up.x, 0, forward.y, left.y, up.y, 0, forward.z, left.z,
         up.z, 0, 0, 0, 0, 1).inverse();
 
+    System.out.println("center = " + center);
+    System.out.println("forward = " + forward);
+    System.out.println("up = " + up);
+    System.out.println();
+    
     model.getRoot().setLocalTransform(Transform.translation(center).times(m));
   }
 

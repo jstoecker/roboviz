@@ -19,21 +19,26 @@ public class TestSPL {
     
     while (true) {
 
-      ByteBuffer buf = ByteBuffer.allocate(187);
-      writeByte(0, buf);
-
-      writeFloat(1, buf);
-      writeFloat(0, buf);
+      ByteBuffer buf = ByteBuffer.allocate(188);
+      writeByte(3, buf); // prefix
+      writeByte(0, buf); // agent
+      
+      // center
+      writeFloat((float)Math.cos(time/250), buf);
+      writeFloat((float)Math.sin(time/250), buf);
       writeFloat(0, buf);
       
+      // forward
       writeFloat((float)Math.cos(time/300), buf);
       writeFloat((float)Math.sin(time/300), buf);
       writeFloat(0, buf);
       
+      // up
       writeFloat(0, buf);
       writeFloat(0, buf);
       writeFloat(1, buf);
       
+      // angles
       for (int i = 0; i < 22; i++) {
         writeFloat((float)Math.cos(time/100), buf);
       }
@@ -41,7 +46,7 @@ public class TestSPL {
       buf.rewind();
       
       DatagramSocket socket = new DatagramSocket();
-      socket.send(new DatagramPacket(buf.array(), 187, InetAddress.getLocalHost(), 32888));
+      socket.send(new DatagramPacket(buf.array(), buf.capacity(), InetAddress.getLocalHost(), 32769));
       Thread.sleep(10);
       time += 10;
     }
